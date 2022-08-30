@@ -89,6 +89,9 @@ endif
   AOT_RELOC := aot_reloc_riscv.c
 
 else ifeq (${WAMR_BUILD_TARGET}, RISCV32)
+  CFLAGS += -DWASM_ENABLE_LIB_LUO980
+  CFLAGS += -I$(IWASM_ROOT)/libraries/lib-luo980
+  CSRCS += lib_luo980_wrapper.c
 
 ifeq (${CONFIG_ARCH_DPFPU},y)
   CFLAGS += -DBUILD_TARGET_RISCV32_ILP32D

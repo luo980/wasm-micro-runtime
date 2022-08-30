@@ -9,6 +9,8 @@
 #include "wasm_export.h"
 #include "bh_platform.h"
 #include "test_wasm.h"
+//#include "lib_luo980_wrapper.h"
+#include "/home/luo980/wasm-micro-runtime/core/iwasm/libraries/lib-luo980/lib_luo980_wrapper.h"
 
 #include "esp_log.h"
 
@@ -45,18 +47,42 @@ iwasm_main(void *arg)
     init_args.mem_alloc_option.allocator.realloc_func = (void *)os_realloc;
     init_args.mem_alloc_option.allocator.free_func = (void *)os_free;
 
+    static NativeSymbol native_symbols[] = { {
+        "foo",      // the name of WASM function name
+        foo_native, // the native function pointer
+        "(ii)i"     // the function prototype signature
+    } };
+
+    // static NativeSymbol native_symbols[] = {
+    //     EXPORT_WASM_API_WITH_SIG(foo,
+    //                              "(ii)i") // wasm symbol name will be "foo2"
+    // };
+
     ESP_LOGI(LOG_TAG, "Initialize WASM runtime");
+
+    int n_native_symbols = sizeof(native_symbols) / sizeof(NativeSymbol);
+
+    // if (!wasm_runtime_register_natives("env", native_symbols,
+    //                                    n_native_symbols)) {
+    //     printf("Failed to register native functions.\n");
+    // }
+
+    init_args.native_symbols = native_symbols;
+    init_args.n_native_symbols = n_native_symbols;
+    init_args.native_module_name = "env";
+
     /* initialize runtime environment */
     if (!wasm_runtime_full_init(&init_args)) {
         ESP_LOGE(LOG_TAG, "Init runtime failed.");
         return NULL;
     }
 
-#if WASM_ENABLE_INTERP != 0
+
+    #if WASM_ENABLE_INTERP != 0
     ESP_LOGI(LOG_TAG, "Run wamr with interpreter");
 
-    wasm_file_buf = (uint8_t *)wasm_test_file_interp;
-    wasm_file_buf_size = sizeof(wasm_test_file_interp);
+    wasm_file_buf = (uint8_t *)wasm_test_file;
+    wasm_file_buf_size = sizeof(wasm_test_file);
 
     /* load WASM module */
     if (!(wasm_module = wasm_runtime_load(wasm_file_buf, wasm_file_buf_size,
@@ -92,8 +118,8 @@ fail1interp:
 #if WASM_ENABLE_AOT != 0
     ESP_LOGI(LOG_TAG, "Run wamr with AoT");
 
-    wasm_file_buf = (uint8_t *)wasm_test_file_aot;
-    wasm_file_buf_size = sizeof(wasm_test_file_aot);
+    wasm_file_buf = (uint8_t *)wasm_test_file;
+    wasm_file_buf_size = sizeof(wasm_test_file);
 
     /* load WASM module */
     if (!(wasm_module = wasm_runtime_load(wasm_file_buf, wasm_file_buf_size,
@@ -126,8 +152,12 @@ fail2aot:
 fail1aot:
 #endif
 
+
+
+    // WASMModuleCommon *module = wasm_runtime_load(buffer, size, error_buf, sizeof(error_buf));
+
     /* destroy runtime environment */
-    ESP_LOGI(LOG_TAG, "Destroy WASM runtime");
+    ESP_LOGI(LOG_TAG, "Destroy WASM runtime\n");
     wasm_runtime_destroy();
 
     return NULL;

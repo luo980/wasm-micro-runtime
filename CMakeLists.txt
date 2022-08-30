@@ -17,6 +17,7 @@ set (CMAKE_C_STANDARD 99)
 # Set WAMR_BUILD_TARGET, currently values supported:
 # "X86_64", "AMD_64", "X86_32", "AARCH64[sub]", "ARM[sub]", "THUMB[sub]",
 # "MIPS", "XTENSA", "RISCV64[sub]", "RISCV32[sub]"
+message("WAMR_BUILD_TARGET is ${WAMR_BUILD_TARGET})")
 if (NOT DEFINED WAMR_BUILD_TARGET)
   if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)")
     set (WAMR_BUILD_TARGET "AARCH64")
@@ -31,70 +32,84 @@ if (NOT DEFINED WAMR_BUILD_TARGET)
   endif ()
 endif ()
 
+message("CMAKE_BUILD_TYPE is {CMAKE_BUILD_TYPE}")
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif ()
 
+message("CMAKE_BUILD_INTERP is ${CMAKE_BUILD_INTERP}")
 if (NOT DEFINED WAMR_BUILD_INTERP)
   # Enable Interpreter by default
   set (WAMR_BUILD_INTERP 1)
 endif ()
 
+message("WAMR_BUILD_AOT is ${WAMR_BUILD_AOT}")
 if (NOT DEFINED WAMR_BUILD_AOT)
   # Enable AOT by default.
   set (WAMR_BUILD_AOT 1)
 endif ()
 
+message("WAMR_BUILD_JIT is ${WAMR_BUILD_JIT}")
 if (NOT DEFINED WAMR_BUILD_JIT)
   # Disable JIT by default.
   set (WAMR_BUILD_JIT 0)
 endif ()
 
+message("WAMR_BUILD_LIBC_BUILTIN is ${WAMR_BUILD_LIBC_BUILTIN}")
 if (NOT DEFINED WAMR_BUILD_LIBC_BUILTIN)
   # Enable libc builtin support by default
   set (WAMR_BUILD_LIBC_BUILTIN 1)
 endif ()
 
+message("WAMR_BUILD_LIBC_WASI is ${WAMR_BUILD_LIBC_WASI}")
 if (NOT DEFINED WAMR_BUILD_LIBC_WASI)
   # Enable libc wasi support by default
   set (WAMR_BUILD_LIBC_WASI 1)
 endif ()
 
+message("WAMR_BUILD_FAST_INTERP is ${WAMR_BUILD_FAST_INTERP}")
 if (NOT DEFINED WAMR_BUILD_FAST_INTERP)
   # Enable fast interpreter
   set (WAMR_BUILD_FAST_INTERP 1)
 endif ()
 
+message("WAMR_BUILD_MULTI_MODULE is ${WAMR_BUILD_MULTI_MODULE}")
 if (NOT DEFINED WAMR_BUILD_MULTI_MODULE)
   # Enable multiple modules
   set (WAMR_BUILD_MULTI_MODULE 0)
 endif ()
 
+message("WAMR_BUILD_LIB_PTHREAD is ${WAMR_BUILD_LIB_PTHREAD}")
 if (NOT DEFINED WAMR_BUILD_LIB_PTHREAD)
   # Disable pthread library by default
   set (WAMR_BUILD_LIB_PTHREAD 0)
 endif ()
 
+message("WAMR_BUILD_MINI_LOADER is ${WAMR_BUILD_MINI_LOADER}")
 if (NOT DEFINED WAMR_BUILD_MINI_LOADER)
   # Disable wasm mini loader by default
   set (WAMR_BUILD_MINI_LOADER 0)
 endif ()
 
+message("WAMR_BUILD_SIMD is ${WAMR_BUILD_SIMD}")
 if (NOT DEFINED WAMR_BUILD_SIMD)
   # Enable SIMD by default
   set (WAMR_BUILD_SIMD 1)
 endif ()
 
+message("WAMR_BUILD_REF_TYPES is ${WAMR_BUILD_REF_TYPES}")
 if (NOT DEFINED WAMR_BUILD_REF_TYPES)
   # Disable reference types by default
   set (WAMR_BUILD_REF_TYPES 0)
 endif ()
 
+message("COLLECT_CODE_COVERAGE is ${COLLECT_CODE_COVERAGE}")
 if (COLLECT_CODE_COVERAGE EQUAL 1)
   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
 endif ()
 
 set (WAMR_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+message("WAMR_ROOT_DIR is ${WAMR_ROOT_DIR}")
 
 include (${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
 

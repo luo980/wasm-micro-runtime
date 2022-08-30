@@ -10,8 +10,8 @@ int
 main(int argc, char **argv)
 {
     char *buf;
-
     printf("Hello world!\n");
+    printf("Hello luo980!\n");
 
     buf = malloc(1024);
     if (!buf) {

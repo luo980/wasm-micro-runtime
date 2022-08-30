@@ -118,6 +118,10 @@
 #define WASM_ENABLE_UVWASI 0
 #endif
 
+#ifndef WASM_ENABLE_LIB_LUO980
+#define WASM_ENABLE_LIB_LUO980 1
+#endif
+
 /* Default disable libc emcc */
 #ifndef WASM_ENABLE_LIBC_EMCC
 #define WASM_ENABLE_LIBC_EMCC 0
